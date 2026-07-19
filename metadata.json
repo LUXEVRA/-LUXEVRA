@@ -1,0 +1,6 @@
+{
+  "name": "LUXEVRA",
+  "description": "LUXEVRA - Crafted Beyond Ordinary. An ultra-premium luxury streetwear e-commerce brand experience.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
