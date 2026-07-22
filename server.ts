@@ -1444,6 +1444,18 @@ export const LOOKBOOK_SCENES: LookbookScene[] = [
     }
   });
 
+  // Serve local static assets and index.html for direct browser access and preview
+  app.use("/assets", express.static(path.join(process.cwd(), "assets")));
+  app.use("/src/assets", express.static(path.join(process.cwd(), "assets")));
+
+  app.get("/", (req, res, next) => {
+    const indexPath = path.join(process.cwd(), "index.html");
+    if (fs.existsSync(indexPath)) {
+      return res.sendFile(indexPath);
+    }
+    next();
+  });
+
   // Setup Vite development server or serve built assets in production
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
@@ -1453,9 +1465,17 @@ export const LOOKBOOK_SCENES: LookbookScene[] = [
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
+    if (fs.existsSync(distPath)) {
+      app.use(express.static(distPath));
+    }
+    app.use(express.static(process.cwd()));
     app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+      const rootIndex = path.join(process.cwd(), "index.html");
+      if (fs.existsSync(rootIndex)) {
+        res.sendFile(rootIndex);
+      } else {
+        res.sendFile(path.join(distPath, "index.html"));
+      }
     });
   }
 

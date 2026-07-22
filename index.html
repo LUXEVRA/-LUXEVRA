@@ -1,13 +1,757 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LUXEVRA — Crafted Beyond Ordinary</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUXEVRA | Luxury Heavyweight Streetwear</title>
+  
+  <!-- Tailwind CSS CDN for instant pure static styling without Node/Vite build -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              black: '#000000',
+              dark: '#0a0a0a',
+              card: '#111111',
+              border: '#1a1a1a',
+              gold: '#c5a059',
+              'gold-light': '#e8d3a2',
+              'gold-dark': '#8c6f36',
+              text: '#ffffff',
+              muted: '#888888'
+            }
+          },
+          fontFamily: {
+            cinzel: ['Cinzel', 'serif'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
 
+  <!-- Master Custom CSS -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col selection:bg-brand-gold selection:text-zinc-950">
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Announcement Bar -->
+  <div class="bg-gradient-to-r from-black via-brand-gold/10 to-black border-b border-brand-gold/20 py-2 px-4 text-center text-[10px] tracking-[0.2em] text-brand-gold uppercase">
+    COMPLIMENTARY DHL AIR EXPRESS SHIPPING ON ORDERS OVER <span class="text-brand-gold-light underline font-medium">₹3,000 / $50</span>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-[#1a1a1a]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex flex-col items-center justify-center group">
+        <span class="font-cinzel font-light text-2xl tracking-[0.3em] text-white group-hover:text-brand-gold transition-colors duration-500">LUXEVRA</span>
+        <span class="text-[8px] tracking-[0.4em] text-[#888888] uppercase mt-1">PARIS</span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center gap-8 text-xs font-normal tracking-widest text-[#888888] uppercase">
+        <a href="#collection" class="hover:text-brand-gold transition-colors">COLLECTION</a>
+        <a href="javascript:void(0)" onclick="openLookbook()" class="hover:text-brand-gold transition-colors">LOOKBOOK</a>
+        <a href="#craft" class="hover:text-brand-gold transition-colors">CRAFT & PACKAGING</a>
+        <a href="javascript:void(0)" onclick="openTrackingPortal()" class="hover:text-brand-gold transition-colors">TRACK ORDER</a>
+      </nav>
+
+      <!-- Right Action Controls -->
+      <div class="flex items-center gap-3">
+        
+        <!-- Search Bar -->
+        <div class="relative hidden sm:block w-40 lg:w-56">
+          <input id="searchInput" type="text" placeholder="Search drop..." class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs text-white placeholder-zinc-500 rounded-sm pl-8 pr-3 py-2 focus:outline-none focus:border-brand-gold/40 transition-all">
+          <svg class="w-3.5 h-3.5 text-[#666666] absolute left-2.5 top-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+
+        <!-- Account / Login -->
+        <div class="relative group">
+          <button id="authBtn" onclick="window.toggleAuthModal()" class="p-2.5 bg-[#0a0a0a] hover:bg-brand-gold hover:text-zinc-950 border border-[#1a1a1a] text-brand-gold rounded-sm transition-all shadow-md flex items-center justify-center">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </button>
+          
+          <div id="accountDropdown" class="absolute right-0 top-full mt-1 hidden bg-[#0a0a0a] border border-[#1a1a1a] rounded-sm shadow-xl p-1 z-50 text-xs font-normal w-40">
+            <div class="px-3 py-2 border-b border-[#1a1a1a] mb-1">
+              <p id="accountEmail" class="text-white truncate font-medium">user@email.com</p>
+              <p id="accountRole" class="text-brand-gold text-[10px] uppercase tracking-widest mt-0.5">MEMBER</p>
+            </div>
+            <button id="userDashboardBtn" onclick="window.openUserDashboard()" class="w-full text-left px-3 py-1.5 text-[#cccccc] hover:text-brand-gold hover:bg-[#111111] rounded-none uppercase tracking-widest text-[10px] hidden">MY DASHBOARD</button>
+            <button id="adminDashboardBtn" onclick="window.openAdminDashboard()" class="w-full text-left px-3 py-1.5 text-[#cccccc] hover:text-brand-gold hover:bg-[#111111] rounded-none uppercase tracking-widest text-[10px] hidden">ADMIN DASHBOARD</button>
+            <button onclick="window.signOutUser()" class="w-full text-left px-3 py-1.5 text-[#cccccc] hover:text-brand-gold hover:bg-[#111111] rounded-none uppercase tracking-widest text-[10px]">SIGN OUT</button>
+          </div>
+        </div>
+
+        <!-- Currency Switcher -->
+        <div class="relative group">
+          <button class="px-2.5 py-1.5 bg-[#0a0a0a] border border-[#1a1a1a] rounded-sm text-xs font-normal text-brand-gold flex items-center gap-1 hover:border-brand-gold/30 transition-colors">
+            <span id="currBtnText">INR</span>
+            <svg class="w-3 h-3 text-[#666666]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="absolute right-0 top-full mt-1 hidden group-hover:block bg-[#0a0a0a] border border-[#1a1a1a] rounded-sm shadow-xl p-1 z-50 text-xs font-normal">
+            <button onclick="setCurrency('INR')" class="w-full text-left px-3 py-1.5 text-[#cccccc] hover:text-brand-gold hover:bg-[#111111] rounded-none">INR (₹)</button>
+            <button onclick="setCurrency('USD')" class="w-full text-left px-3 py-1.5 text-[#cccccc] hover:text-brand-gold hover:bg-[#111111] rounded-none">USD ($)</button>
+            <button onclick="setCurrency('EUR')" class="w-full text-left px-3 py-1.5 text-[#cccccc] hover:text-brand-gold hover:bg-[#111111] rounded-none">EUR (€)</button>
+            <button onclick="setCurrency('GBP')" class="w-full text-left px-3 py-1.5 text-[#cccccc] hover:text-brand-gold hover:bg-[#111111] rounded-none">GBP (£)</button>
+          </div>
+        </div>
+
+        <!-- Bag / Cart Button -->
+        <button onclick="toggleCartDrawer(true)" class="relative p-2.5 bg-[#0a0a0a] hover:bg-brand-gold hover:text-zinc-950 border border-[#1a1a1a] text-brand-gold rounded-sm transition-all shadow-md">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span id="cartBadge" class="absolute -top-1.5 -right-1.5 w-5 h-5 bg-brand-gold text-zinc-950 text-[10px] font-medium rounded-full flex items-center justify-center border-2 border-zinc-950 shadow">0</span>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Slider -->
+  <section class="relative bg-black overflow-hidden border-b border-[#1a1a1a] min-h-[520px] flex items-center">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center z-10">
+      
+      <!-- Text Side -->
+      <div class="lg:col-span-6 space-y-6">
+        <div id="heroBadge" class="inline-block px-3 py-1 bg-brand-gold/10 border border-brand-gold/20 rounded-none text-[11px] font-normal tracking-widest text-brand-gold uppercase">
+          LIMITED QUANTITIES
+        </div>
+
+        <h1 class="text-4xl sm:text-5xl xl:text-6xl font-cinzel font-medium tracking-tight leading-none text-white">
+          <span id="heroTitle1" class="block">CRAFTED</span>
+          <span id="heroTitle2" class="block gold-gradient-text mt-1">BEYOND ORDINARY</span>
+        </h1>
+
+        <p id="heroDesc" class="text-sm sm:text-base text-[#888888] max-w-xl leading-relaxed">
+          Luxury is in the details. Every stitch, every fabric, every design — crafted to define your identity.
+        </p>
+
+        <div class="flex flex-wrap items-center gap-4 pt-2">
+          <a href="#collection" class="btn-gold px-8 py-3.5 rounded-sm text-xs uppercase font-medium tracking-wider flex items-center gap-2">
+            <span>EXPLORE DROP</span>
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+
+          <button onclick="openLookbook()" class="btn-outline-gold px-6 py-3.5 rounded-sm text-xs uppercase font-normal tracking-wider">
+            LOOKBOOK
+          </button>
+        </div>
+
+        <!-- Slider Dots & Arrows -->
+        <div class="flex items-center gap-4 pt-4">
+          <button onclick="prevHero()" class="p-2 rounded-sm bg-[#0a0a0a] border border-[#1a1a1a] text-[#888888] hover:text-brand-gold hover:border-brand-gold/30">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          
+          <div class="flex items-center gap-2">
+            <button id="heroDot0" onclick="setHero(0)" class="w-8 h-1 bg-brand-gold rounded-full transition-all"></button>
+            <button id="heroDot1" onclick="setHero(1)" class="w-2 h-1 bg-zinc-700 rounded-full transition-all"></button>
+            <button id="heroDot2" onclick="setHero(2)" class="w-2 h-1 bg-zinc-700 rounded-full transition-all"></button>
+          </div>
+
+          <button onclick="nextHero()" class="p-2 rounded-sm bg-[#0a0a0a] border border-[#1a1a1a] text-[#888888] hover:text-brand-gold hover:border-brand-gold/30">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Image Side -->
+      <div class="lg:col-span-6 relative flex justify-center">
+        <div class="relative w-full max-w-md aspect-[4/5] rounded-none overflow-hidden border border-brand-gold/20 gold-border-glow shadow-2xl bg-[#0a0a0a]">
+          <img id="heroImg" src="./assets/images/hero_tee_1784392131084.jpg" alt="LUXEVRA Hero Piece" class="w-full h-full object-cover object-center transition-all duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
+          
+          <div class="absolute bottom-4 left-4 right-4 p-4 bg-black/80 backdrop-blur-md border border-[#1a1a1a] rounded-sm flex items-center justify-between">
+            <div>
+              <p class="text-[10px] tracking-widest text-brand-gold uppercase font-normal">FEATURING</p>
+              <p class="text-xs font-cinzel font-normal text-white">450 GSM HEAVYWEIGHT DROP</p>
+            </div>
+            <span class="text-xs font-normal text-brand-gold">LIMITED READY</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Value Proposition Strip -->
+  <section class="py-8 bg-black border-b border-[#1a1a1a]">
+    <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div class="p-4 rounded-sm bg-[#0a0a0a] border border-[#1a1a1a]">
+        <p class="font-cinzel text-xs font-normal text-brand-gold tracking-wider">450 GSM COTTON</p>
+        <p class="text-[11px] text-[#666666] mt-1">Double-faced organic loopback</p>
+      </div>
+      <div class="p-4 rounded-sm bg-[#0a0a0a] border border-[#1a1a1a]">
+        <p class="font-cinzel text-xs font-normal text-brand-gold tracking-wider">GOLD EMBROIDERED</p>
+        <p class="text-[11px] text-[#666666] mt-1">High-density pigment logos</p>
+      </div>
+      <div class="p-4 rounded-sm bg-[#0a0a0a] border border-[#1a1a1a]">
+        <p class="font-cinzel text-xs font-normal text-brand-gold tracking-wider">LUXURY PACKAGING</p>
+        <p class="text-[11px] text-[#666666] mt-1">Rigid gold-stamped box</p>
+      </div>
+      <div class="p-4 rounded-sm bg-[#0a0a0a] border border-[#1a1a1a]">
+        <p class="font-cinzel text-xs font-normal text-brand-gold tracking-wider">EXPRESS AIR FREIGHT</p>
+        <p class="text-[11px] text-[#666666] mt-1">Global DHL tracked delivery</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Collection Section -->
+  <section id="collection" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1">
+    
+    <!-- Section Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-[#1a1a1a]">
+      <div>
+        <span class="text-xs font-normal tracking-[0.3em] text-brand-gold-dark uppercase block mb-1">HAUTE COUTURE CATALOG</span>
+        <h2 class="text-3xl sm:text-4xl font-cinzel font-normal text-white">THE LATEST DROP</h2>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex flex-wrap gap-2 border-b border-[#1a1a1a] md:border-none pb-2 md:pb-0">
+        <button id="tab_all" onclick="setCategory('all')" class="px-4 py-2 text-xs font-normal tracking-widest text-brand-gold border-b-2 border-brand-gold uppercase">ALL</button>
+        <button id="tab_hoodies" onclick="setCategory('hoodies')" class="px-4 py-2 text-xs font-normal tracking-widest text-[#666666] hover:text-[#cccccc] uppercase transition-colors">HOODIES</button>
+        <button id="tab_tees" onclick="setCategory('tees')" class="px-4 py-2 text-xs font-normal tracking-widest text-[#666666] hover:text-[#cccccc] uppercase transition-colors">TEES</button>
+        <button id="tab_pants" onclick="setCategory('pants')" class="px-4 py-2 text-xs font-normal tracking-widest text-[#666666] hover:text-[#cccccc] uppercase transition-colors">PANTS</button>
+        <button id="tab_accessories" onclick="setCategory('accessories')" class="px-4 py-2 text-xs font-normal tracking-widest text-[#666666] hover:text-[#cccccc] uppercase transition-colors">ACCESSORIES</button>
+      </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+
+  </section>
+
+  <!-- Craft & Packaging Showcase -->
+  <section id="craft" class="py-16 bg-black border-t border-b border-[#1a1a1a]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-normal tracking-[0.3em] text-brand-gold-dark uppercase">UNBOXING PERFECTION</span>
+        <h2 class="text-3xl font-cinzel font-normal text-white mt-2">LUXURY PACKAGING & CRAFT</h2>
+        <p class="text-sm text-[#888888] mt-2">Every purchase is delivered in our slide-out rigid white box with gold hot-stamping and custom matte black bag.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-[#0a0a0a] border border-[#1a1a1a] rounded-none overflow-hidden p-6 hover:border-brand-gold/20 transition-all">
+          <div class="aspect-[4/3] rounded-sm overflow-hidden mb-4 bg-black border border-[#1a1a1a]">
+            <img src="./assets/images/luxevra_packaging_1784392190373.jpg" alt="LUXEVRA Box & Bag" class="w-full h-full object-cover">
+          </div>
+          <h3 class="font-cinzel text-lg font-normal text-brand-gold">RIGID GOLD-STAMPED BOX</h3>
+          <p class="text-xs text-[#888888] mt-2 leading-relaxed">Made from 400 GSM matte cardstock with gold foil stamping and silk pull ribbon.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] border border-[#1a1a1a] rounded-none overflow-hidden p-6 hover:border-brand-gold/20 transition-all">
+          <div class="aspect-[4/3] rounded-sm overflow-hidden mb-4 bg-black border border-[#1a1a1a]">
+            <img src="./assets/images/leather_patch_1784392207167.jpg" alt="Leather Monogram Patch" class="w-full h-full object-cover">
+          </div>
+          <h3 class="font-cinzel text-lg font-normal text-brand-gold">EMBOSSED LEATHER PATCH</h3>
+          <p class="text-xs text-[#888888] mt-2 leading-relaxed">Full-grain Italian leather hand-stitched on shoulder seams with deep debossed gold monograms.</p>
+        </div>
+
+        <div class="bg-[#0a0a0a] border border-[#1a1a1a] rounded-none overflow-hidden p-6 hover:border-brand-gold/20 transition-all">
+          <div class="aspect-[4/3] rounded-sm overflow-hidden mb-4 bg-black border border-[#1a1a1a]">
+            <img src="./assets/images/signature_tee_1784392156271.jpg" alt="High-density Gold Print" class="w-full h-full object-cover">
+          </div>
+          <h3 class="font-cinzel text-lg font-normal text-brand-gold">HIGH-DENSITY GOLD PRINT</h3>
+          <p class="text-xs text-[#888888] mt-2 leading-relaxed">Raised matte gold pigment that retains vibrant luster through dozens of delicate washes.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black border-t border-[#1a1a1a] py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <span class="font-cinzel font-medium text-xl text-brand-gold tracking-widest block mb-2">LUXEVRA</span>
+        <p class="text-xs text-[#666666] leading-relaxed">Defining contemporary luxury through extreme heavyweight cotton drapes and timeless gold accents.</p>
+      </div>
+      <div>
+        <h4 class="text-xs font-normal text-[#cccccc] tracking-widest uppercase mb-3">NAVIGATION</h4>
+        <ul class="space-y-2 text-xs text-[#666666]">
+          <li><a href="#collection" class="hover:text-brand-gold transition-colors">Latest Drop</a></li>
+          <li><a href="javascript:void(0)" onclick="openLookbook()" class="hover:text-brand-gold transition-colors">Interactive Lookbook</a></li>
+          <li><a href="#craft" class="hover:text-brand-gold transition-colors">Packaging Craft</a></li>
+          <li><a href="javascript:void(0)" onclick="openTrackingPortal()" class="hover:text-brand-gold transition-colors">Order Tracking</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs font-normal text-[#cccccc] tracking-widest uppercase mb-3">HELP & CARE</h4>
+        <ul class="space-y-2 text-xs text-[#666666]">
+          <li><span>Worldwide DHL Express</span></li>
+          <li><span>30-Day Return Privilege</span></li>
+          <li><span>Authenticity Certificate Included</span></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-xs font-normal text-[#cccccc] tracking-widest uppercase mb-3">PRIVILEGE NEWSLETTER</h4>
+        <p class="text-xs text-[#666666] mb-3">Be notified first when secret drops release.</p>
+        <div class="flex gap-2">
+          <input type="email" placeholder="Enter your email" class="bg-[#0a0a0a] border border-[#1a1a1a] text-xs px-3 py-2 rounded-none text-white focus:outline-none focus:border-brand-gold flex-1">
+          <button onclick="showToast('Subscribed to VIP Drops!')" class="btn-gold px-4 py-2 rounded-none text-xs font-normal">JOIN</button>
+        </div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 mt-8 pt-6 border-t border-[#1a1a1a] text-center text-[10px] text-[#444444]">
+      &copy; 2026 LUXEVRA PARIS HAUTE COUTURE. ALL RIGHTS RESERVED.
+    </div>
+  </footer>
+
+  <!-- Slide-Over Shopping Cart Drawer -->
+  <div id="cartDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-black border-l border-[#1a1a1a] shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+    <!-- Header -->
+    <div class="p-5 border-b border-[#1a1a1a] flex items-center justify-between">
+      <div>
+        <h3 class="font-cinzel text-lg font-normal text-white">YOUR BAG</h3>
+        <p class="text-[10px] text-[#666666] uppercase tracking-wider">COMPLIMENTARY DHL EXPRESS SHIPPING OVER ₹3,000</p>
+      </div>
+      <button onclick="toggleCartDrawer(false)" class="p-2 text-[#888888] hover:text-white rounded-sm">✕</button>
+    </div>
+
+    <!-- Free Shipping Gauge -->
+    <div class="px-5 py-3 bg-[#0a0a0a] border-b border-[#1a1a1a]">
+      <div class="w-full bg-[#111111] h-1.5 rounded-full overflow-hidden">
+        <div id="freeShippingProgress" class="bg-brand-gold h-full w-0 transition-all duration-500"></div>
+      </div>
+    </div>
+
+    <!-- Cart Items List -->
+    <div id="cartItemsList" class="flex-1 overflow-y-auto p-5 space-y-3"></div>
+
+    <!-- Footer Summary & Promo -->
+    <div class="p-5 border-t border-[#1a1a1a] bg-[#0a0a0a] space-y-4">
+      <div class="flex gap-2">
+        <input id="promoInput" type="text" placeholder="Promo code (e.g. LUXEVRA10)" class="bg-black border border-[#1a1a1a] text-xs px-3 py-2 rounded-none text-white focus:outline-none flex-1 uppercase">
+        <button onclick="applyPromoCode()" class="px-4 py-2 bg-[#111111] hover:bg-zinc-700 text-white text-xs font-normal rounded-none">APPLY</button>
+      </div>
+
+      <div class="space-y-1.5 text-xs">
+        <div class="flex justify-between text-[#888888]"><span>Subtotal:</span><span id="cartSubtotal" class="font-normal text-white">₹0</span></div>
+        <div class="flex justify-between text-[#888888]"><span>Global Shipping:</span><span class="text-white font-normal">COMPLIMENTARY</span></div>
+        <div class="flex justify-between text-sm font-medium text-brand-gold pt-2 border-t border-[#1a1a1a]">
+          <span>Total:</span>
+          <span id="cartTotal">₹0</span>
+        </div>
+      </div>
+
+      <button onclick="openCheckout()" class="w-full btn-gold py-3.5 rounded-sm font-normal tracking-wider text-xs uppercase shadow-lg">
+        PROCEED TO CHECKOUT
+      </button>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal -->
+  <div id="productDetailModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
+    <div class="bg-black border border-brand-gold/20 rounded-none max-w-4xl w-full max-h-[90vh] overflow-y-auto p-6 relative animate-fade-in text-white shadow-2xl">
+      <button onclick="closeProductModal()" class="absolute top-4 right-4 p-2 bg-[#0a0a0a] border border-[#1a1a1a] hover:border-brand-gold rounded-full text-[#888888] hover:text-white">✕</button>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Left Image + 3D Canvas Visualizer -->
+        <div>
+          <div class="aspect-[4/5] rounded-sm overflow-hidden bg-[#0a0a0a] border border-[#1a1a1a] mb-4 relative">
+            <img id="modalMainImg" src="" alt="" class="w-full h-full object-cover">
+          </div>
+          <div id="modalThumbnails" class="flex gap-2 overflow-x-auto pb-2"></div>
+
+          <!-- Interactive 2D/3D Canvas Visualizer -->
+          <div class="mt-4 p-3 bg-[#0a0a0a] border border-[#1a1a1a] rounded-sm text-center">
+            <p class="text-[10px] font-normal text-brand-gold uppercase tracking-widest mb-2">3D GARMENT VECTOR PREVIEW</p>
+            <canvas id="garmentCanvas" width="300" height="240" class="mx-auto rounded-none border border-[#1a1a1a] bg-black">
+              <img src="./assets/images/oversized_hoodie_1784392144459.jpg" alt="3D Garment Fallback" class="w-[300px] h-[240px] object-cover">
+            </canvas>
+          </div>
+        </div>
+
+        <!-- Right Product Information -->
+        <div class="space-y-5">
+          <div>
+            <h2 id="modalTitle" class="text-2xl font-cinzel font-normal text-white"></h2>
+            <div class="flex items-center gap-3 mt-2">
+              <span id="modalPrice" class="text-xl font-medium text-brand-gold"></span>
+              <span id="modalOrigPrice" class="text-sm text-[#666666] line-through"></span>
+            </div>
+          </div>
+
+          <p id="modalDesc" class="text-xs text-[#888888] leading-relaxed"></p>
+
+          <!-- Color Picker -->
+          <div>
+            <label class="text-[10px] font-normal text-[#888888] uppercase tracking-wider block mb-2">SELECT COLORWAY</label>
+            <div id="modalColors" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Size Picker -->
+          <div>
+            <label class="text-[10px] font-normal text-[#888888] uppercase tracking-wider block mb-2">SELECT SIZE</label>
+            <div id="modalSizes" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Add to Cart CTA -->
+          <button onclick="addToCart(appState.activeProductModal, appState.activeSize, appState.activeColor); closeProductModal(); toggleCartDrawer(true);" class="w-full btn-gold py-3.5 rounded-sm font-normal tracking-wider text-xs uppercase shadow-xl">
+            ADD TO BAG
+          </button>
+
+          <!-- Specs Accordion -->
+          <div id="modalSpecs" class="pt-4 border-t border-[#1a1a1a]"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Order Checkout Modal -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
+    <div class="bg-black border border-brand-gold/20 rounded-none max-w-lg w-full p-6 relative text-white shadow-2xl">
+      <button onclick="closeCheckout()" class="absolute top-4 right-4 text-[#888888] hover:text-white">✕</button>
+      <h3 class="font-cinzel text-xl font-normal text-brand-gold mb-1">HAUTE CHECKOUT</h3>
+      <p class="text-xs text-[#666666] mb-4">Enter shipping details for DHL Air Freight dispatch.</p>
+
+      <form onsubmit="processOrder(event)" class="space-y-3">
+        <div>
+          <label class="text-[10px] text-[#888888] uppercase font-normal block mb-1">Full Name</label>
+          <input id="checkName" required type="text" placeholder="e.g. Alexander Vance" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs px-3 py-2 rounded-none text-white focus:border-brand-gold outline-none">
+        </div>
+        <div>
+          <label class="text-[10px] text-[#888888] uppercase font-normal block mb-1">Email Address</label>
+          <input id="checkEmail" required type="email" placeholder="alexander@domain.com" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs px-3 py-2 rounded-none text-white focus:border-brand-gold outline-none">
+        </div>
+        <div>
+          <label class="text-[10px] text-[#888888] uppercase font-normal block mb-1">Shipping Address</label>
+          <textarea required rows="2" placeholder="Street, City, Postal Code, Country" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs px-3 py-2 rounded-none text-white focus:border-brand-gold outline-none"></textarea>
+        </div>
+
+        <div id="checkoutSummary" class="p-3 bg-[#0a0a0a] border border-[#1a1a1a] rounded-sm"></div>
+
+        <button type="submit" class="w-full btn-gold py-3.5 rounded-sm text-xs font-normal tracking-wider uppercase shadow-lg">
+          CONFIRM & DISPATCH ORDER
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Order Confirmation Modal -->
+  <div id="orderConfirmModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
+    <div class="bg-black border border-brand-gold/30 rounded-none max-w-md w-full p-6 text-center space-y-4 shadow-2xl">
+      <div class="w-12 h-12 rounded-full bg-brand-gold/10 text-brand-gold border border-brand-gold/40 flex items-center justify-center mx-auto text-xl font-normal">✓</div>
+      <h3 class="font-cinzel text-xl font-normal text-white">ORDER DISPATCHED</h3>
+      <p class="text-xs text-[#888888]">Your order has been recorded and handed to DHL Quality Control.</p>
+      
+      <div class="bg-[#0a0a0a] p-4 rounded-sm border border-[#1a1a1a] text-left text-xs space-y-2">
+        <div><span class="text-[#666666]">Order ID:</span> <span id="confirmOrderId" class="font-mono font-normal text-brand-gold"></span></div>
+        <div><span class="text-[#666666]">Tracking Code:</span> <span id="confirmTrackingCode" class="font-mono font-normal text-white"></span></div>
+      </div>
+
+      <button onclick="closeOrderConfirm()" class="w-full btn-gold py-3 rounded-sm text-xs font-normal uppercase">
+        RETURN TO STORE
+      </button>
+    </div>
+  </div>
+
+  <!-- Order Tracking Modal -->
+  <div id="trackingModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
+    <div class="bg-black border border-[#1a1a1a] rounded-none max-w-md w-full p-6 relative shadow-2xl">
+      <button onclick="closeTrackingPortal()" class="absolute top-4 right-4 text-[#888888] hover:text-white">✕</button>
+      <h3 class="font-cinzel text-lg font-normal text-white mb-1">GLOBAL ORDER TRACKING</h3>
+      <p class="text-xs text-[#666666] mb-4">Enter your LUXEVRA order ID (e.g. LX-98241)</p>
+
+      <div class="flex gap-2 mb-4">
+        <input id="trackingQuery" type="text" placeholder="LX-98241" class="bg-[#0a0a0a] border border-[#1a1a1a] text-xs px-3 py-2 rounded-none text-white flex-1 uppercase font-mono focus:border-brand-gold outline-none">
+        <button onclick="lookupOrder()" class="btn-gold px-4 py-2 text-xs font-normal rounded-none">SEARCH</button>
+      </div>
+
+      <div id="trackingResult"></div>
+    </div>
+  </div>
+
+  <!-- Lookbook Modal -->
+  <div id="lookbookModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
+    <div class="bg-black border border-brand-gold/20 rounded-none max-w-3xl w-full p-6 relative shadow-2xl">
+      <button onclick="closeLookbook()" class="absolute top-4 right-4 text-[#888888] hover:text-white z-10">✕</button>
+      <h3 class="font-cinzel text-xl font-normal text-brand-gold mb-1">NOCTURNAL MINIMALISM</h3>
+      <p class="text-xs text-[#666666] mb-4">Interactive Lookbook Scene 01</p>
+
+      <div class="relative aspect-[16/9] rounded-sm overflow-hidden border border-[#1a1a1a] bg-[#0a0a0a]">
+        <img src="./assets/images/oversized_hoodie_1784392144459.jpg" alt="Lookbook Scene" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/20"></div>
+
+        <!-- Hotspot Tag -->
+        <button onclick="openProductModal('oversized-hoodie'); closeLookbook();" class="absolute top-1/3 left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-brand-gold/90 text-zinc-950 font-normal flex items-center justify-center hotspot-pulse text-xs hover:scale-110 transition-transform">
+          +
+        </button>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- User Dashboard Modal -->
+  <div id="userDashboardModal" class="fixed inset-0 z-50 modal-overlay hidden p-0">
+    <div class="bg-black w-full h-full overflow-y-auto animate-fade-in text-white relative flex flex-col">
+      <header class="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-[#1a1a1a] p-4 sm:px-8 flex items-center justify-between">
+        <h2 class="font-cinzel text-xl text-brand-gold tracking-widest uppercase">My Portal</h2>
+        <button onclick="window.closeUserDashboard()" class="text-[#888888] hover:text-white">✕</button>
+      </header>
+      <div class="max-w-7xl mx-auto w-full flex-1 grid grid-cols-1 md:grid-cols-4 gap-8 p-4 sm:p-8">
+        <aside class="md:col-span-1 space-y-2 border-r border-[#1a1a1a] pr-4 flex flex-col">
+          <button onclick="switchUserTab('profile')" class="user-tab-btn text-left px-4 py-3 text-xs tracking-widest uppercase border border-transparent hover:border-brand-gold/30 bg-[#111111] text-brand-gold w-full transition-colors">Profile</button>
+          <button onclick="switchUserTab('orders')" class="user-tab-btn text-left px-4 py-3 text-xs tracking-widest uppercase border border-transparent hover:border-brand-gold/30 text-[#888888] w-full transition-colors">Orders</button>
+          <button onclick="switchUserTab('addresses')" class="user-tab-btn text-left px-4 py-3 text-xs tracking-widest uppercase border border-transparent hover:border-brand-gold/30 text-[#888888] w-full transition-colors">Addresses</button>
+          <button onclick="switchUserTab('wishlist')" class="user-tab-btn text-left px-4 py-3 text-xs tracking-widest uppercase border border-transparent hover:border-brand-gold/30 text-[#888888] w-full transition-colors">Wishlist</button>
+        </aside>
+        <main class="md:col-span-3 pb-20">
+          
+          <!-- Profile Tab -->
+          <div id="userTab-profile" class="user-tab-content space-y-6">
+            <h3 class="font-cinzel text-lg tracking-widest uppercase text-white border-b border-[#1a1a1a] pb-2">Profile Details</h3>
+            <div class="space-y-4 max-w-sm">
+              <div>
+                <label class="block text-[10px] text-[#666666] tracking-widest uppercase mb-1">Full Name</label>
+                <input type="text" id="udName" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs text-white p-3 rounded-none focus:outline-none focus:border-brand-gold/40 transition-all" readonly>
+              </div>
+              <div>
+                <label class="block text-[10px] text-[#666666] tracking-widest uppercase mb-1">Email Address</label>
+                <input type="email" id="udEmail" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs text-white p-3 rounded-none focus:outline-none focus:border-brand-gold/40 transition-all" readonly>
+              </div>
+              <div>
+                <label class="block text-[10px] text-[#666666] tracking-widest uppercase mb-1">Role</label>
+                <input type="text" id="udRole" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs text-brand-gold p-3 rounded-none focus:outline-none" readonly>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Orders Tab -->
+          <div id="userTab-orders" class="user-tab-content hidden space-y-6">
+            <h3 class="font-cinzel text-lg tracking-widest uppercase text-white border-b border-[#1a1a1a] pb-2">Order History</h3>
+            <div id="udOrdersList" class="space-y-4">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+          
+          <!-- Addresses Tab -->
+          <div id="userTab-addresses" class="user-tab-content hidden space-y-6">
+            <h3 class="font-cinzel text-lg tracking-widest uppercase text-white border-b border-[#1a1a1a] pb-2">Saved Addresses</h3>
+            <div id="udAddressesList" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Rendered via JS -->
+            </div>
+            <div class="pt-4 border-t border-[#1a1a1a]">
+              <textarea id="udNewAddress" rows="3" placeholder="Enter new address..." class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs text-white p-3 rounded-none focus:outline-none focus:border-brand-gold/40 transition-all mb-2"></textarea>
+              <button onclick="window.saveNewAddress()" class="btn-gold px-6 py-2 rounded-sm text-xs font-normal tracking-widest">ADD ADDRESS</button>
+            </div>
+          </div>
+          
+          <!-- Wishlist Tab -->
+          <div id="userTab-wishlist" class="user-tab-content hidden space-y-6">
+            <h3 class="font-cinzel text-lg tracking-widest uppercase text-white border-b border-[#1a1a1a] pb-2">My Wishlist</h3>
+            <div id="udWishlistList" class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard Modal -->
+  <div id="adminDashboardModal" class="fixed inset-0 z-50 modal-overlay hidden p-0">
+    <div class="bg-black w-full h-full overflow-y-auto animate-fade-in text-white relative flex flex-col">
+      <header class="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b border-brand-gold/30 p-4 sm:px-8 flex items-center justify-between">
+        <h2 class="font-cinzel text-xl text-brand-gold tracking-widest uppercase flex items-center gap-3">
+          <span class="w-2 h-2 bg-brand-gold rounded-full animate-pulse"></span>
+          Command Center <span class="text-[10px] text-[#888888] ml-2">ADMIN</span>
+        </h2>
+        <button onclick="window.closeAdminDashboard()" class="text-[#888888] hover:text-white">✕</button>
+      </header>
+      
+      <div class="max-w-7xl mx-auto w-full flex-1 grid grid-cols-1 lg:grid-cols-5 gap-8 p-4 sm:p-8">
+        <!-- Admin Sidebar -->
+        <aside class="lg:col-span-1 space-y-2 border-r border-[#1a1a1a] pr-4 flex flex-col">
+          <button onclick="switchAdminTab('overview')" class="admin-tab-btn text-left px-4 py-3 text-xs tracking-widest uppercase border border-transparent hover:border-brand-gold/30 bg-[#111111] text-brand-gold w-full transition-colors">Overview</button>
+          <button onclick="switchAdminTab('users')" class="admin-tab-btn text-left px-4 py-3 text-xs tracking-widest uppercase border border-transparent hover:border-brand-gold/30 text-[#888888] w-full transition-colors">Users</button>
+          <button onclick="switchAdminTab('orders')" class="admin-tab-btn text-left px-4 py-3 text-xs tracking-widest uppercase border border-transparent hover:border-brand-gold/30 text-[#888888] w-full transition-colors">Orders</button>
+          <button onclick="switchAdminTab('products')" class="admin-tab-btn text-left px-4 py-3 text-xs tracking-widest uppercase border border-transparent hover:border-brand-gold/30 text-[#888888] w-full transition-colors">Products</button>
+        </aside>
+
+        <!-- Admin Content -->
+        <main class="lg:col-span-4 pb-20">
+          
+          <!-- Overview Tab -->
+          <div id="adminTab-overview" class="admin-tab-content space-y-8">
+            <h3 class="font-cinzel text-lg tracking-widest uppercase text-white border-b border-[#1a1a1a] pb-2">Business Analytics</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="p-6 bg-[#0a0a0a] border border-[#1a1a1a] rounded-sm">
+                <p class="text-[10px] text-[#888888] tracking-widest uppercase mb-2">Total Revenue</p>
+                <p id="adminStatRevenue" class="text-3xl font-cinzel text-brand-gold">₹0</p>
+              </div>
+              <div class="p-6 bg-[#0a0a0a] border border-[#1a1a1a] rounded-sm">
+                <p class="text-[10px] text-[#888888] tracking-widest uppercase mb-2">Total Orders</p>
+                <p id="adminStatOrders" class="text-3xl font-cinzel text-white">0</p>
+              </div>
+              <div class="p-6 bg-[#0a0a0a] border border-[#1a1a1a] rounded-sm">
+                <p class="text-[10px] text-[#888888] tracking-widest uppercase mb-2">Total Users</p>
+                <p id="adminStatUsers" class="text-3xl font-cinzel text-white">0</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Users Tab -->
+          <div id="adminTab-users" class="admin-tab-content hidden space-y-6">
+            <h3 class="font-cinzel text-lg tracking-widest uppercase text-white border-b border-[#1a1a1a] pb-2">Registered Accounts</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="text-[10px] text-[#666666] uppercase tracking-widest border-b border-[#1a1a1a]">
+                  <tr>
+                    <th class="pb-3 font-normal">Name</th>
+                    <th class="pb-3 font-normal">Email</th>
+                    <th class="pb-3 font-normal">Role</th>
+                  </tr>
+                </thead>
+                <tbody id="adminUsersList" class="divide-y divide-[#1a1a1a]">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Orders Tab -->
+          <div id="adminTab-orders" class="admin-tab-content hidden space-y-6">
+            <h3 class="font-cinzel text-lg tracking-widest uppercase text-white border-b border-[#1a1a1a] pb-2">Order Management</h3>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="text-[10px] text-[#666666] uppercase tracking-widest border-b border-[#1a1a1a]">
+                  <tr>
+                    <th class="pb-3 font-normal">Order ID</th>
+                    <th class="pb-3 font-normal">Customer Info</th>
+                    <th class="pb-3 font-normal">Total</th>
+                    <th class="pb-3 font-normal">Status</th>
+                    <th class="pb-3 font-normal text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="adminOrdersList" class="divide-y divide-[#1a1a1a]">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Products Tab -->
+          <div id="adminTab-products" class="admin-tab-content hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-[#1a1a1a] pb-2">
+              <h3 class="font-cinzel text-lg tracking-widest uppercase text-white">Inventory</h3>
+              <button onclick="window.openProductEditor(null)" class="btn-gold px-4 py-1.5 rounded-sm text-[10px] tracking-widest">+ NEW PRODUCT</button>
+            </div>
+            
+            <!-- Product Editor form (hidden by default) -->
+            <div id="adminProductEditor" class="hidden bg-[#0a0a0a] p-6 border border-brand-gold/30 rounded-sm mb-6 relative">
+              <button onclick="document.getElementById('adminProductEditor').classList.add('hidden')" class="absolute top-4 right-4 text-[#888888] hover:text-white text-xs">✕</button>
+              <h4 class="font-cinzel text-sm text-brand-gold mb-4 uppercase tracking-widest" id="adminProductEditorTitle">Add Product</h4>
+              <form id="adminProductForm" class="space-y-4" onsubmit="window.saveAdminProduct(event)">
+                <input type="hidden" id="apId">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-[10px] text-[#666666] tracking-widest uppercase mb-1">Product Name</label>
+                    <input type="text" id="apName" required class="w-full bg-black border border-[#1a1a1a] text-xs text-white p-2 focus:border-brand-gold/40 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-[#666666] tracking-widest uppercase mb-1">Price (₹)</label>
+                    <input type="number" id="apPrice" required class="w-full bg-black border border-[#1a1a1a] text-xs text-white p-2 focus:border-brand-gold/40 focus:outline-none">
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-[#666666] tracking-widest uppercase mb-1">Category</label>
+                    <input type="text" id="apCategory" required class="w-full bg-black border border-[#1a1a1a] text-xs text-white p-2 focus:border-brand-gold/40 focus:outline-none" placeholder="e.g. all, heavyweight, light">
+                  </div>
+                  <div>
+                    <label class="block text-[10px] text-[#666666] tracking-widest uppercase mb-1">Image URL</label>
+                    <input type="text" id="apImage" required class="w-full bg-black border border-[#1a1a1a] text-xs text-white p-2 focus:border-brand-gold/40 focus:outline-none">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-[10px] text-[#666666] tracking-widest uppercase mb-1">Description</label>
+                  <textarea id="apDesc" rows="3" required class="w-full bg-black border border-[#1a1a1a] text-xs text-white p-2 focus:border-brand-gold/40 focus:outline-none"></textarea>
+                </div>
+                <div class="pt-2 flex gap-3">
+                  <button type="submit" class="btn-gold px-6 py-2 text-xs tracking-widest rounded-sm">SAVE</button>
+                  <button type="button" onclick="document.getElementById('adminProductEditor').classList.add('hidden')" class="px-6 py-2 text-xs tracking-widest border border-[#1a1a1a] hover:bg-[#111111]">CANCEL</button>
+                </div>
+              </form>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="adminProductsList">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth Modal -->
+  <div id="authModal" class="fixed inset-0 z-50 modal-overlay hidden items-center justify-center p-4">
+    <div class="bg-black border border-brand-gold/20 rounded-sm max-w-sm w-full p-8 relative shadow-2xl animate-fade-in text-center">
+      <button onclick="window.toggleAuthModal()" class="absolute top-4 right-4 text-[#888888] hover:text-white transition-colors">✕</button>
+      
+      <div class="flex justify-center mb-6">
+        <svg class="w-10 h-10 text-brand-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </div>
+
+      <h3 class="font-cinzel text-xl font-light tracking-widest text-white mb-2 uppercase">Client Portal</h3>
+      <p id="authSubtitle" class="text-[11px] tracking-[0.1em] text-[#888888] mb-6 uppercase">Access your exclusive collection.</p>
+
+      <form id="authForm" onsubmit="window.handleAuthSubmit(event)" class="space-y-4 text-left">
+        <div id="nameFieldGroup" class="hidden">
+          <label class="text-[10px] text-white uppercase font-medium tracking-widest block mb-1">Full Name</label>
+          <input id="authName" type="text" placeholder="ALEXANDER VANCE" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs px-3 py-2.5 rounded-sm text-white focus:border-brand-gold outline-none transition-colors">
+        </div>
+        <div>
+          <label class="text-[10px] text-white uppercase font-medium tracking-widest block mb-1">Email Address</label>
+          <input id="authEmail" required type="email" placeholder="client@luxevra.com" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs px-3 py-2.5 rounded-sm text-white focus:border-brand-gold outline-none transition-colors">
+        </div>
+        <div>
+          <label class="text-[10px] text-white uppercase font-medium tracking-widest flex justify-between items-center mb-1">
+            <span>Password</span>
+            <button type="button" class="text-[9px] text-[#888888] hover:text-brand-gold capitalize font-normal tracking-normal">Forgot Password?</button>
+          </label>
+          <input id="authPassword" required type="password" placeholder="••••••••" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs px-3 py-2.5 rounded-sm text-white focus:border-brand-gold outline-none transition-colors">
+        </div>
+        <div id="confirmPasswordFieldGroup" class="hidden">
+          <label class="text-[10px] text-white uppercase font-medium tracking-widest block mb-1">Confirm Password</label>
+          <input id="authConfirmPassword" type="password" placeholder="••••••••" class="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-xs px-3 py-2.5 rounded-sm text-white focus:border-brand-gold outline-none transition-colors">
+        </div>
+
+        <button type="submit" id="authSubmitBtn" class="w-full btn-gold py-3.5 rounded-sm font-medium tracking-widest text-[11px] uppercase mt-4">
+          SIGN IN
+        </button>
+      </form>
+      
+      <p class="text-[10px] text-[#888888] mt-6">
+        <span id="authToggleText">New to LUXEVRA?</span>
+        <button onclick="window.toggleAuthMode()" id="authToggleBtn" class="text-brand-gold hover:text-white uppercase tracking-wider ml-1 underline decoration-brand-gold/30 underline-offset-4">Create Account</button>
+      </p>
+    </div>
+  </div>
+
+  <!-- Master JavaScript Execution -->
+  <script src="./assets/js/local-auth.js"></script>
+  <script src="./assets/js/main.js"></script>
+  <script src="./assets/js/dashboards.js"></script>
+</body>
+</html>
