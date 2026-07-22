@@ -1,0 +1,156 @@
+[
+  {
+    "id": "oversized-hoodie",
+    "name": "OVERSIZED HOODIE",
+    "price": 2799,
+    "originalPrice": 3499,
+    "image": "/src/assets/images/oversized_hoodie_1784392144459.jpg",
+    "images": [
+      "/src/assets/images/oversized_hoodie_1784392144459.jpg",
+      "/src/assets/images/vintage_wash_hoodie_1784392179215.jpg",
+      "/src/assets/images/luxevra_packaging_1784392190373.jpg"
+    ],
+    "badge": "NEW",
+    "description": "An ultra-heavyweight oversized hoodie crafted from 450 GSM double-faced organic loopback cotton. Designed with dropped shoulders, a structured hood without drawcords for a clean aesthetic, and hand-embroidered tone-on-tone signature monogram.",
+    "details": [
+      "450 GSM Organic Cotton Terry",
+      "Pre-shrunk, heavy-weight drape",
+      "Structured double-layer hood (no drawcords)",
+      "Kangaroo pocket with reinforced bartacks",
+      "Ribbed side panels for comfort"
+    ],
+    "specs": {
+      "fit": "Oversized silhouette, dropped shoulders",
+      "weight": "Heavy-weight (450 GSM)",
+      "composition": "100% Organic Cotton French Terry"
+    },
+    "colors": [
+      { "name": "Obsidian Black", "hex": "#0a0a0a" },
+      { "name": "Oatmeal Cream", "hex": "#eae6df" },
+      { "name": "Sage Green", "hex": "#636d5e" }
+    ]
+  },
+  {
+    "id": "signature-tee",
+    "name": "SIGNATURE TEE",
+    "price": 1699,
+    "originalPrice": 2199,
+    "image": "/src/assets/images/signature_tee_1784392156271.jpg",
+    "images": [
+      "/src/assets/images/signature_tee_1784392156271.jpg",
+      "/src/assets/images/hero_tee_1784392131084.jpg",
+      "/src/assets/images/leather_patch_1784392207167.jpg"
+    ],
+    "badge": "BESTSELLER",
+    "description": "A boxy, heavyweight luxury tee made from 280 GSM long-staple combed cotton. Featuring our signature logo printed across the shoulder yoke in high-density premium raised gold matte pigment.",
+    "details": [
+      "280 GSM Long-Staple Combed Cotton",
+      "Double-needle stitched 1.2\" neckband",
+      "Thick rib collar that retains shape",
+      "Signature logo embossed on back yoke in gold matte",
+      "Custom woven brand label at hem"
+    ],
+    "specs": {
+      "fit": "Boxy, relaxed drop-shoulder",
+      "weight": "Heavy-weight (280 GSM)",
+      "composition": "100% Premium Combed Cotton"
+    },
+    "colors": [
+      { "name": "Alabaster White", "hex": "#fafafa" },
+      { "name": "Onyx Black", "hex": "#111111" },
+      { "name": "Desert Sand", "hex": "#d5c8b7" }
+    ]
+  },
+  {
+    "id": "cargo-pants",
+    "name": "CARGO PANTS",
+    "price": 2499,
+    "originalPrice": 3199,
+    "image": "/src/assets/images/cargo_pants_1784392167112.jpg",
+    "images": [
+      "/src/assets/images/cargo_pants_1784392167112.jpg",
+      "/src/assets/images/leather_patch_1784392207167.jpg",
+      "/src/assets/images/luxevra_packaging_1784392190373.jpg"
+    ],
+    "badge": "NEW",
+    "description": "Relaxed-fit cargo trousers constructed from heavy cotton twill. Features structured modular cargo pockets with a subtle gold monogram embroidery, adjustable hem drawcords, and custom hardware.",
+    "details": [
+      "Premium heavy cotton twill fabric",
+      "Ergonomic knee darts for movement",
+      "Dual-entry side cargo pockets",
+      "Engraved brand rivets and custom hardware",
+      "Adjustable toggles at ankle hem"
+    ],
+    "specs": {
+      "fit": "Relaxed fit with straight or tapered hem adjustable toggles",
+      "weight": "Medium-to-heavy cotton twill",
+      "composition": "98% Cotton, 2% Elastane for structured stretch"
+    },
+    "colors": [
+      { "name": "Olive Drab", "hex": "#44493c" },
+      { "name": "Stealth Black", "hex": "#18181b" },
+      { "name": "Vintage Khaki", "hex": "#baa68f" }
+    ]
+  },
+  {
+    "id": "vintage-wash-hoodie",
+    "name": "VINTAGE WASH HOODIE",
+    "price": 2999,
+    "originalPrice": 3799,
+    "image": "/src/assets/images/vintage_wash_hoodie_1784392179215.jpg",
+    "images": [
+      "/src/assets/images/vintage_wash_hoodie_1784392179215.jpg",
+      "/src/assets/images/oversized_hoodie_1784392144459.jpg",
+      "/src/assets/images/hero_tee_1784392131084.jpg"
+    ],
+    "badge": "LIMITED",
+    "description": "Individually dyed and washed for a faded, broken-in vintage feel. Features a heavy-weight 480 French Terry body, distress-dyed seams, and the iconic branding debossed across the shoulders.",
+    "details": [
+      "480 GSM Heavy French Terry",
+      "Hand-done vintage-effect stone wash",
+      "Signature logo embossed on reverse in tonal grey",
+      "Ribbed side gussets for durable structure",
+      "Double-stitched stress seams"
+    ],
+    "specs": {
+      "fit": "Slouchy, classic heavy drape",
+      "weight": "Ultra-heavyweight (480 GSM)",
+      "composition": "100% Cotton French Terry"
+    },
+    "colors": [
+      { "name": "Faded Charcoal", "hex": "#2f3136" },
+      { "name": "Aged Plum", "hex": "#413642" },
+      { "name": "Distressed Sage", "hex": "#52574d" }
+    ]
+  },
+  {
+    "id": "couture-beanie",
+    "name": "COUTURE WOVEN BEANIE",
+    "price": 999,
+    "originalPrice": 1499,
+    "image": "/src/assets/images/leather_patch_1784392207167.jpg",
+    "images": [
+      "/src/assets/images/leather_patch_1784392207167.jpg",
+      "/src/assets/images/luxevra_packaging_1784392190373.jpg"
+    ],
+    "badge": "NEW",
+    "description": "An exceptionally warm, heavy-knit wool beanie displaying the signature double-knit weave. Made with premium ultra-soft merino wool threads and finished with a micro-embossed hand-stitched gold-embroidered leather label.",
+    "details": [
+      "100% Premium Australian Merino Wool",
+      "Thick double-knit ribbing structure",
+      "Adjustable folded cuff tailoring",
+      "Hand-sewn full-grain leather badge with gold hot-stamping",
+      "Extremely breathable yet highly thermal"
+    ],
+    "specs": {
+      "fit": "Universal stretch fit, adjustable fold",
+      "weight": "Heavy-gauge knit (120g)",
+      "composition": "100% Fine Merino Wool"
+    },
+    "colors": [
+      { "name": "Atelier Gold", "hex": "#c4a465" },
+      { "name": "Vanilla Cream", "hex": "#faf6f0" },
+      { "name": "Midnight Onyx", "hex": "#0b0b0b" }
+    ]
+  }
+]
