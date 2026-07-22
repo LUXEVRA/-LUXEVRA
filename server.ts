@@ -693,6 +693,11 @@ async function startServer() {
   // Serve static folders
   app.use("/uploaded", express.static(UPLOADS_DIR));
   app.use("/uploads", express.static(PUBLIC_UPLOADS_DIR));
+  app.use("/public", express.static(path.join(process.cwd(), "public")));
+  app.use("/assets", express.static(path.join(process.cwd(), "public", "assets")));
+  app.use("/assets", express.static(path.join(process.cwd(), "src", "assets")));
+  app.use("/src/assets", express.static(path.join(process.cwd(), "src", "assets")));
+  app.use("/src/assets", express.static(path.join(process.cwd(), "public", "src", "assets")));
 
   // Initialize Supabase Client
   const supabaseUrl = process.env.SUPABASE_URL || "";

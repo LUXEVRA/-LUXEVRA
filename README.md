@@ -137,19 +137,59 @@ Because the app features dynamic API endpoints (`/api/auth/*`), static hosts alo
 
 ---
 
-## 🖥️ Local Verification
-To test the production build locally:
+## 🖥️ Local Running Guide (Offline ZIP Export)
+
+Follow these simple steps to run the LUXEVRA Atelier website locally on any PC (Windows, macOS, or Linux) directly from your downloaded ZIP archive.
+
+### 📋 Prerequisites
+- **Node.js**: Make sure you have Node.js installed (version 18 or higher is recommended). You can download it from [nodejs.org](https://nodejs.org/).
+
+### 🚀 Step-by-Step Instructions
+
+1. **Extract the ZIP**:
+   Extract the downloaded project ZIP file to a folder of your choice on your PC (e.g., `C:\luxevra` or `~/luxevra`).
+
+2. **Open your Terminal / Command Prompt**:
+   - **On Windows**: Press the `Win` key, type `cmd` (Command Prompt) or `powershell` (PowerShell), and navigate to your extracted folder:
+     ```cmd
+     cd C:\path\to\extracted\luxevra
+     ```
+   - **On macOS / Linux**: Open the Terminal app and navigate to your folder:
+     ```bash
+     cd /path/to/extracted/luxevra
+     ```
+
+3. **Install Dependencies**:
+   Install all required local packages and dependencies by running:
+   ```bash
+   npm install
+   ```
+
+4. **Build the Project**:
+   Build the React frontend and compile the Express backend by running:
+   ```bash
+   npm run build
+   ```
+   *This bundles the entire application, copies all assets (including products, hoodies, T-shirts, and graphics) to the `dist/` directory, and compiles the backend server.*
+
+5. **Start the Server**:
+   Start the compiled production full-stack server offline by running:
+   ```bash
+   npm run start
+   ```
+
+6. **Open the Website**:
+   Open your web browser and navigate to:
+   ```
+   http://localhost:3000
+   ```
+
+### ⚙️ Development Mode (Optional)
+If you want to run the project in interactive development mode with live code-watching, simply run:
 ```bash
-# Clear any older builds
-npm run clean
-
-# Run full production compilation
-npm run build
-
-# Start the compiled production bundle
-NODE_ENV=production npm run start
+npm run dev
 ```
-The application will launch on `http://localhost:3000`.
+Then navigate to `http://localhost:3000` in your browser.
 
 ---
 *Crafted elegantly with care. © 2026 LUXEVRA Atelier.*
